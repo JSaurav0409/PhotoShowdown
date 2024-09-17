@@ -43,7 +43,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Fetch a random local image URL
     const fetchNewImage = () => {
         const randomIndex = Math.floor(Math.random() * femaleImages.length);
-        console.log(`Fetching image index: ${randomIndex}, URL: ${femaleImages[randomIndex]}`);
         return femaleImages[randomIndex];
     };
 
@@ -69,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
         imagesData[loserUrl].rating += K * (0 - expectedLoser);
 
         imagesData[winnerUrl].clicks++;
-        imagesData[loserUrl].clicks++; // Track clicks for both images
+        imagesData[loserUrl].clicks++;
 
         console.log(`Updated Elo ratings: ${winnerUrl} (${imagesData[winnerUrl].rating}), ${loserUrl} (${imagesData[loserUrl].rating})`);
         console.log(`Click counts: ${winnerUrl} (${imagesData[winnerUrl].clicks}), ${loserUrl} (${imagesData[loserUrl].clicks})`);
@@ -82,19 +81,24 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="ranking-item">
                 <img src="${url}" alt="Ranked Image" class="ranking-image">
                 <p>Rank: ${index + 1}</p>
-                <p>Clicks: ${data.clicks}</p> <!-- Display number of clicks -->
+                <p>Clicks: ${data.clicks}</p>
             </div>
         `).join('');
     };
 
     // Initialize the images with initial ratings and clicks
     const initializeImages = () => {
-        const url1 = fetchNewImage();
-        const url2 = fetchNewImage();
+        let url1, url2;
+
+        do {
+            url1 = fetchNewImage();
+            url2 = fetchNewImage();
+        } while (url1 === url2); // Ensure images are different
 
         image1.src = url1;
         image2.src = url2;
 
+        // Initialize image data if not present
         if (!imagesData[url1]) {
             imagesData[url1] = { rating: initialRating, clicks: 0 };
         }
@@ -105,9 +109,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Handle image clicks and update ratings and clicks
     const handleImageClick = (clickedImage, otherImage) => {
-        console.log('Clicked Image URL:', clickedImage.src);
-        console.log('Other Image URL:', otherImage.src);
-
         if (userClickCount >= maxClicks) {
             alert('You have reached the maximum number of clicks.');
             reloadButton.style.display = 'block';
@@ -119,12 +120,27 @@ document.addEventListener('DOMContentLoaded', () => {
         const clickedImageUrl = clickedImage.src;
         const otherImageUrl = otherImage.src;
 
+        // Ensure the image data is correctly updated
+        if (!imagesData[clickedImageUrl]) {
+            imagesData[clickedImageUrl] = { rating: initialRating, clicks: 1 };
+        } else {
+            imagesData[clickedImageUrl].clicks++;
+        }
+
+        // Update Elo ratings
         updateEloRatings(clickedImageUrl, otherImageUrl);
 
-        otherImage.src = fetchNewImage();
+        // Fetch and set a new image for the otherImage
+        let newImageUrl;
+        do {
+            newImageUrl = fetchNewImage();
+        } while (newImageUrl === clickedImageUrl || newImageUrl === otherImageUrl);
 
-        if (!imagesData[otherImage.src]) {
-            imagesData[otherImage.src] = { rating: initialRating, clicks: 0 };
+        otherImage.src = newImageUrl;
+
+        // Initialize new image data
+        if (!imagesData[newImageUrl]) {
+            imagesData[newImageUrl] = { rating: initialRating, clicks: 0 };
         }
 
         if (userClickCount >= maxClicks) {
