@@ -27,7 +27,8 @@ main {
 
 .image-container {
     display: flex;
-    justify-content: space-around;
+    justify-content: center; /* Center images and VS text */
+    align-items: center;
     margin-bottom: 2rem;
 }
 
@@ -44,6 +45,11 @@ img {
 img:hover {
     border-color: #4a90e2;
     transform: scale(1.05); /* Scale up image slightly on hover */
+}
+
+#vs {
+    font-size: 2rem;
+    margin: 0 2rem; /* Space between images */
 }
 
 button {
@@ -92,6 +98,11 @@ button:active {
 
 #scoreboard p {
     font-size: 1rem;
+}
+#vs {
+    font-size: 2rem;
+    margin: 0 2rem; /* Space between images */
+    color: #4a90e2;
 }
 
 /* Style for the reload game button */
