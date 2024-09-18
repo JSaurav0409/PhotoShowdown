@@ -9,11 +9,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const hollywoodButton = document.getElementById('hollywood-button');
     const bollywoodButton = document.getElementById('bollywood-button');
     const randomButton = document.getElementById('random-button');
+    const remainingClicksDisplay = document.getElementById('remaining-clicks');
     const maxClicks = 10;
     let userClickCount = 0;
     let currentCategory = 'random';
 
-    // Hollywood images
+     // Hollywood images
     const hollywoodImages = [
         'Actress_Images/Scarlett Johansson.jpg',
         'Actress_Images/Angelina Jolie.jpg',
@@ -54,14 +55,10 @@ document.addEventListener('DOMContentLoaded', () => {
         'Bollywood_Images/Tapsee Pannu.jpg'
     ];
 
-    // Store each image's URL, Elo rating, and clicks
     let imagesData = {};
-
-    // Initial Elo rating
     const initialRating = 1000;
     const K = 32;
 
-    // Function to fetch random image based on category
     const fetchNewImage = () => {
         let imageArray;
         if (currentCategory === 'hollywood') {
@@ -69,18 +66,16 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (currentCategory === 'bollywood') {
             imageArray = bollywoodImages;
         } else {
-            imageArray = hollywoodImages.concat(bollywoodImages); // Combine both for random
+            imageArray = hollywoodImages.concat(bollywoodImages);
         }
         const randomIndex = Math.floor(Math.random() * imageArray.length);
         return imageArray[randomIndex];
     };
 
-    // Calculate expected score for image A vs image B
     const calculateExpectedScore = (ratingA, ratingB) => {
         return 1 / (1 + Math.pow(10, (ratingB - ratingA) / 400));
     };
 
-    // Update Elo ratings and click counts
     const updateEloRatings = (winnerUrl, loserUrl) => {
         if (!imagesData[winnerUrl] || !imagesData[loserUrl]) {
             console.error('One or both URLs are not present in imagesData:', winnerUrl, loserUrl);
@@ -98,13 +93,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         imagesData[winnerUrl].clicks++;
         imagesData[loserUrl].clicks++;
+
+        console.log(`Updated ratings - Winner: ${winnerUrl}, Loser: ${loserUrl}`);
     };
 
-    // Function to update the scoreboard to show top 5 ranks and clicks
     const updateScoreboard = () => {
         const sortedImages = Object.entries(imagesData)
             .sort((a, b) => b[1].clicks - a[1].clicks)
-            .slice(0, 5); // Get top 5 images
+            .slice(0, 5);
 
         scoreboard.innerHTML = sortedImages.map(([url, data], index) => `
             <div class="ranking-item">
@@ -115,32 +111,30 @@ document.addEventListener('DOMContentLoaded', () => {
         `).join('');
     };
 
-    // Initialize the images with initial ratings and clicks
     const initializeImages = () => {
         let url1, url2;
 
         do {
             url1 = fetchNewImage();
             url2 = fetchNewImage();
-        } while (url1 === url2); // Ensure images are different
+        } while (url1 === url2);
 
         image1.src = url1;
         image2.src = url2;
 
-        // Initialize image data if not present
         if (!imagesData[url1]) {
             imagesData[url1] = { rating: initialRating, clicks: 0 };
         }
         if (!imagesData[url2]) {
             imagesData[url2] = { rating: initialRating, clicks: 0 };
         }
+
+        updateRemainingClicks(); // Update display on initialization
     };
 
-    // Handle image clicks and update ratings and clicks
     const handleImageClick = (clickedImage, otherImage) => {
         if (userClickCount >= maxClicks) {
-            alert('You have reached the maximum number of clicks.');
-            reloadButton.style.display = 'block';
+            showPopup();
             return;
         }
 
@@ -149,17 +143,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const clickedImageUrl = clickedImage.src;
         const otherImageUrl = otherImage.src;
 
-        // Ensure the image data is correctly updated
         if (!imagesData[clickedImageUrl]) {
             imagesData[clickedImageUrl] = { rating: initialRating, clicks: 1 };
         } else {
             imagesData[clickedImageUrl].clicks++;
         }
 
-        // Update Elo ratings
         updateEloRatings(clickedImageUrl, otherImageUrl);
 
-        // Fetch and set a new image for the otherImage
         let newImageUrl;
         do {
             newImageUrl = fetchNewImage();
@@ -167,7 +158,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         otherImage.src = newImageUrl;
 
-        // Initialize new image data
         if (!imagesData[newImageUrl]) {
             imagesData[newImageUrl] = { rating: initialRating, clicks: 0 };
         }
@@ -175,6 +165,56 @@ document.addEventListener('DOMContentLoaded', () => {
         if (userClickCount >= maxClicks) {
             reloadButton.style.display = 'block';
         }
+
+        updateRemainingClicks(); // Update display after each click
+    };
+
+    const updateRemainingClicks = () => {
+        const remainingClicks = maxClicks - userClickCount;
+        remainingClicksDisplay.textContent = `Remaining Clicks: ${remainingClicks}`;
+        console.log(`Remaining clicks updated: ${remainingClicks}`);
+    };
+
+    const reloadGame = () => {
+        userClickCount = 0;
+        imagesData = {};
+        reloadButton.style.display = 'none';
+        rankingSection.style.display = 'none';
+        scoreboard.innerHTML = '';
+        initializeImages();
+    };
+
+    const showPopup = () => {
+        const popup = document.getElementById('popup');
+        const popupMessage = document.getElementById('popup-message');
+        const popupReloadButton = document.getElementById('popup-reload-button');
+
+        popupMessage.innerHTML = `
+            <p>You have reached the maximum number of clicks.</p>
+            <div id="popup-scoreboard">
+                ${Object.entries(imagesData)
+                    .sort((a, b) => b[1].clicks - a[1].clicks)
+                    .slice(0, 5)
+                    .map(([url, data]) => `
+                        <div class="popup-item">
+                            <img src="${url}" alt="Popup Image" class="popup-image">
+                            <p>Clicks: ${data.clicks}</p>
+                        </div>
+                    `).join('')}
+            </div>
+        `;
+
+        popup.style.display = 'flex';
+
+        const closeButton = document.querySelector('.popup-close');
+        closeButton.addEventListener('click', () => {
+            popup.style.display = 'none';
+        });
+
+        popupReloadButton.addEventListener('click', () => {
+            popup.style.display = 'none';
+            reloadGame();
+        });
     };
 
     image1.addEventListener('click', () => handleImageClick(image1, image2));
@@ -190,37 +230,23 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     reloadButton.addEventListener('click', () => {
-        // Reset the game state
-        userClickCount = 0;
-        imagesData = {};
-        reloadButton.style.display = 'none';
-        
-        // Hide ranking section and clear scoreboard
-        rankingSection.style.display = 'none';
-        scoreboard.innerHTML = '';
-        
-        // Reinitialize images
-        initializeImages();
+        reloadGame();
     });
 
-    // Hollywood button click
     hollywoodButton.addEventListener('click', () => {
         currentCategory = 'hollywood';
-        initializeImages();
+        reloadGame();
     });
 
-    // Bollywood button click
     bollywoodButton.addEventListener('click', () => {
         currentCategory = 'bollywood';
-        initializeImages();
+        reloadGame();
     });
 
-    // Random button click
     randomButton.addEventListener('click', () => {
         currentCategory = 'random';
-        initializeImages();
+        reloadGame();
     });
 
-    // Initial load of images
     initializeImages();
 });
