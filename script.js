@@ -6,11 +6,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const hideRankingButton = document.getElementById('hide-ranking');
     const rankingSection = document.getElementById('ranking');
     const reloadButton = document.getElementById('reload-button');
+    const hollywoodButton = document.getElementById('hollywood-button');
+    const bollywoodButton = document.getElementById('bollywood-button');
+    const randomButton = document.getElementById('random-button');
     const maxClicks = 10;
     let userClickCount = 0;
+    let currentCategory = 'random';
 
-    // Array of local images
-    const femaleImages = [
+    // Hollywood images
+    const hollywoodImages = [
         'Actress_Images/Scarlett Johansson.jpg',
         'Actress_Images/Angelina Jolie.jpg',
         'Actress_Images/Emma Watson.jpg',
@@ -33,6 +37,23 @@ document.addEventListener('DOMContentLoaded', () => {
         'Actress_Images/Elizabeth Olsen.jpg'
     ];
 
+    // Bollywood images
+    const bollywoodImages = [
+        'Bollywood_Images/Alia Bhatt.jpg',
+        'Bollywood_Images/Disha Patani.jpg',
+        'Bollywood_Images/Jacqueline Fernandez.jpg',
+        'Bollywood_Images/Jhanvi Kapoor.jpg',
+        'Bollywood_Images/Katrina Kaif.jpg',
+        'Bollywood_Images/Kiara Advani.jpg',
+        'Bollywood_Images/Kriti Sanon.jpg',
+        'Bollywood_Images/Mrunal Thakur.jpg',
+        'Bollywood_Images/Priyanka Chopra.jpg',
+        'Bollywood_Images/Sara ali khan.jpg',
+        'Bollywood_Images/Shraddha Kapoor.jpg',
+        'Bollywood_Images/Tamanah Bhatia.jpg',
+        'Bollywood_Images/Tapsee Pannu.jpg'
+    ];
+
     // Store each image's URL, Elo rating, and clicks
     let imagesData = {};
 
@@ -40,10 +61,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const initialRating = 1000;
     const K = 32;
 
-    // Fetch a random local image URL
+    // Function to fetch random image based on category
     const fetchNewImage = () => {
-        const randomIndex = Math.floor(Math.random() * femaleImages.length);
-        return femaleImages[randomIndex];
+        let imageArray;
+        if (currentCategory === 'hollywood') {
+            imageArray = hollywoodImages;
+        } else if (currentCategory === 'bollywood') {
+            imageArray = bollywoodImages;
+        } else {
+            imageArray = hollywoodImages.concat(bollywoodImages); // Combine both for random
+        }
+        const randomIndex = Math.floor(Math.random() * imageArray.length);
+        return imageArray[randomIndex];
     };
 
     // Calculate expected score for image A vs image B
@@ -69,14 +98,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         imagesData[winnerUrl].clicks++;
         imagesData[loserUrl].clicks++;
-
-        console.log(`Updated Elo ratings: ${winnerUrl} (${imagesData[winnerUrl].rating}), ${loserUrl} (${imagesData[loserUrl].rating})`);
-        console.log(`Click counts: ${winnerUrl} (${imagesData[winnerUrl].clicks}), ${loserUrl} (${imagesData[loserUrl].clicks})`);
     };
 
-    // Function to update the scoreboard to show ranks and clicks
+    // Function to update the scoreboard to show top 5 ranks and clicks
     const updateScoreboard = () => {
-        const sortedImages = Object.entries(imagesData).sort((a, b) => b[1].clicks - a[1].clicks);
+        const sortedImages = Object.entries(imagesData)
+            .sort((a, b) => b[1].clicks - a[1].clicks)
+            .slice(0, 5); // Get top 5 images
+
         scoreboard.innerHTML = sortedImages.map(([url, data], index) => `
             <div class="ranking-item">
                 <img src="${url}" alt="Ranked Image" class="ranking-image">
@@ -171,6 +200,24 @@ document.addEventListener('DOMContentLoaded', () => {
         scoreboard.innerHTML = '';
         
         // Reinitialize images
+        initializeImages();
+    });
+
+    // Hollywood button click
+    hollywoodButton.addEventListener('click', () => {
+        currentCategory = 'hollywood';
+        initializeImages();
+    });
+
+    // Bollywood button click
+    bollywoodButton.addEventListener('click', () => {
+        currentCategory = 'bollywood';
+        initializeImages();
+    });
+
+    // Random button click
+    randomButton.addEventListener('click', () => {
+        currentCategory = 'random';
         initializeImages();
     });
 
