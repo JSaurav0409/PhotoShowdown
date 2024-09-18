@@ -4,6 +4,9 @@ body {
     margin: 0;
     padding: 0;
     background-color: #f4f4f4;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Ensure the body covers the full viewport height */
 }
 
 header {
@@ -24,6 +27,7 @@ main {
     padding: 2rem;
     max-width: 1200px;
     margin: 0 auto;
+    flex: 1; /* Ensure the main section expands to take up remaining space */
 }
 
 /* Text Before Images */
@@ -164,6 +168,20 @@ button:active {
 
 #reload-button:active {
     background: #2a65a0;
+}
+
+/* Footer Styles */
+footer {
+    background: #333;
+    color: #fff;
+    padding: 1rem;
+    text-align: center;
+    border-top: 5px solid #357abd;
+    margin-top: auto; /* Push footer to the bottom of the page */
+}
+
+footer p {
+    margin: 0;
 }
 
 /* Media Queries */
