@@ -102,13 +102,13 @@ document.addEventListener('DOMContentLoaded', () => {
             .sort((a, b) => b[1].clicks - a[1].clicks)
             .slice(0, 5);
 
-        scoreboard.innerHTML = sortedImages.map(([url, data], index) => `
-            <div class="ranking-item">
-                <img src="${url}" alt="Ranked Image" class="ranking-image">
-                <p>Rank: ${index + 1}</p>
-                <p>Clicks: ${data.clicks}</p>
-            </div>
-        `).join('');
+        scoreboard.innerHTML = sortedImages.map(([url], index) => `
+    <div class="ranking-item">
+        <img src="${url}" alt="Ranked Image" class="ranking-image">
+        <p>Rank: ${index + 1}</p>
+    </div>
+`).join('');
+
     };
 
     const initializeImages = () => {
@@ -132,42 +132,45 @@ document.addEventListener('DOMContentLoaded', () => {
         updateRemainingClicks(); // Update display on initialization
     };
 
-    const handleImageClick = (clickedImage, otherImage) => {
-        if (userClickCount >= maxClicks) {
-            showPopup();
-            return;
-        }
+const handleImageClick = (clickedImage, otherImage) => {
+    if (userClickCount >= maxClicks) {
+        alert(`You have reached the maximum number of clicks. No remaining clicks left!`);
+        showPopup(); // Show the popup after alert
+        return;
+    }
 
-        userClickCount++;
+    userClickCount++;
 
-        const clickedImageUrl = clickedImage.src;
-        const otherImageUrl = otherImage.src;
+    const clickedImageUrl = clickedImage.src;
+    const otherImageUrl = otherImage.src;
 
-        if (!imagesData[clickedImageUrl]) {
-            imagesData[clickedImageUrl] = { rating: initialRating, clicks: 1 };
-        } else {
-            imagesData[clickedImageUrl].clicks++;
-        }
+    if (!imagesData[clickedImageUrl]) {
+        imagesData[clickedImageUrl] = { rating: initialRating, clicks: 1 };
+    } else {
+        imagesData[clickedImageUrl].clicks++;
+    }
 
-        updateEloRatings(clickedImageUrl, otherImageUrl);
+    updateEloRatings(clickedImageUrl, otherImageUrl);
 
-        let newImageUrl;
-        do {
-            newImageUrl = fetchNewImage();
-        } while (newImageUrl === clickedImageUrl || newImageUrl === otherImageUrl);
+    let newImageUrl;
+    do {
+        newImageUrl = fetchNewImage();
+    } while (newImageUrl === clickedImageUrl || newImageUrl === otherImageUrl);
 
-        otherImage.src = newImageUrl;
+    otherImage.src = newImageUrl;
 
-        if (!imagesData[newImageUrl]) {
-            imagesData[newImageUrl] = { rating: initialRating, clicks: 0 };
-        }
+    if (!imagesData[newImageUrl]) {
+        imagesData[newImageUrl] = { rating: initialRating, clicks: 0 };
+    }
 
-        if (userClickCount >= maxClicks) {
-            reloadButton.style.display = 'block';
-        }
+    if (userClickCount >= maxClicks) {
+        reloadButton.style.display = 'block';
+        alert(`You have reached the maximum number of clicks. No remaining clicks left!`);
+    }
 
-        updateRemainingClicks(); // Update display after each click
-    };
+    updateRemainingClicks(); // Update display after each click
+};
+
 
     const updateRemainingClicks = () => {
         const remainingClicks = maxClicks - userClickCount;
@@ -185,37 +188,41 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const showPopup = () => {
-        const popup = document.getElementById('popup');
-        const popupMessage = document.getElementById('popup-message');
-        const popupReloadButton = document.getElementById('popup-reload-button');
+    // Alert the user that they've hit the maximum clicks
+    alert("You have reached the maximum number of clicks.");
 
-        popupMessage.innerHTML = `
-            <p>You have reached the maximum number of clicks.</p>
-            <div id="popup-scoreboard">
-                ${Object.entries(imagesData)
-                    .sort((a, b) => b[1].clicks - a[1].clicks)
-                    .slice(0, 5)
-                    .map(([url, data]) => `
-                        <div class="popup-item">
-                            <img src="${url}" alt="Popup Image" class="popup-image">
-                            <p>Clicks: ${data.clicks}</p>
-                        </div>
-                    `).join('')}
-            </div>
-        `;
+    const popup = document.getElementById('popup');
+    const popupMessage = document.getElementById('popup-message');
+    const popupReloadButton = document.getElementById('popup-reload-button');
 
-        popup.style.display = 'flex';
+    popupMessage.innerHTML = `
+        <p>You have reached the maximum number of clicks.</p>
+        <div id="popup-scoreboard">
+            ${Object.entries(imagesData)
+                .sort((a, b) => b[1].clicks - a[1].clicks)
+                .slice(0, 5)
+                .map(([url, data]) => `
+                    <div class="popup-item">
+                        <img src="${url}" alt="Popup Image" class="popup-image">
+                        <p>Clicks: ${data.clicks}</p>
+                    </div>
+                `).join('')}
+        </div>
+    `;
 
-        const closeButton = document.querySelector('.popup-close');
-        closeButton.addEventListener('click', () => {
-            popup.style.display = 'none';
-        });
+    popup.style.display = 'flex';
 
-        popupReloadButton.addEventListener('click', () => {
-            popup.style.display = 'none';
-            reloadGame();
-        });
-    };
+    const closeButton = document.querySelector('.popup-close');
+    closeButton.addEventListener('click', () => {
+        popup.style.display = 'none';
+    });
+
+    popupReloadButton.addEventListener('click', () => {
+        popup.style.display = 'none';
+        reloadGame();
+    });
+};
+
 
     image1.addEventListener('click', () => handleImageClick(image1, image2));
     image2.addEventListener('click', () => handleImageClick(image2, image1));
