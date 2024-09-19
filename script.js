@@ -32,10 +32,14 @@ document.addEventListener('DOMContentLoaded', () => {
         'Actress_Images/Eiza González.jpg',
         'Actress_Images/Alicia Vikander.jpg',
         'Actress_Images/Sofia Vergara.jpg',
-        'Actress_Images/Emily Blunt.jpg',
         'Actress_Images/Halle Berry.jpg',
         'Actress_Images/Rosie Huntington-Whiteley.jpg',
-        'Actress_Images/Elizabeth Olsen.jpg'
+        'Actress_Images/Elizabeth Olsen.jpg',
+        'Actress_Images/Anne Hathaway.jpg',
+        'Actress_Images/Emma Stone.jpg',
+        'Actress_Images/Cobie Smulder.jpg',
+        'Actress_Images/Megan Fox.jpg',
+        'Actress_Images/Sophie Turner.jpg',
     ];
 
     // Bollywood images
@@ -52,7 +56,9 @@ document.addEventListener('DOMContentLoaded', () => {
         'Bollywood_Images/Sara ali khan.jpg',
         'Bollywood_Images/Shraddha Kapoor.jpg',
         'Bollywood_Images/Tamanah Bhatia.jpg',
-        'Bollywood_Images/Tapsee Pannu.jpg'
+        'Bollywood_Images/Tapsee Pannu.jpg',
+        'Bollywood_Images/Bhumi Pednekar.jpg',
+        'Bollywood_Images/Nargis Fakhri.jpg',
     ];
 
     let imagesData = {};
