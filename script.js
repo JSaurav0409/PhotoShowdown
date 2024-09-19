@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const bollywoodButton = document.getElementById('bollywood-button');
     const randomButton = document.getElementById('random-button');
     const remainingClicksDisplay = document.getElementById('remaining-clicks');
-    const maxClicks = 10;
+    const maxClicks = 20;
     let userClickCount = 0;
     let currentCategory = 'random';
 
