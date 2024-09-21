@@ -6,59 +6,57 @@ body {
     background-color: #f4f4f4;
     display: flex;
     flex-direction: column;
-    min-height: 100vh; /* Ensure the body covers the full viewport height */
+    min-height: 100vh;
 }
 
 /* Header Styles */
 header {
     background: linear-gradient(90deg, #4a90e2, #357abd);
     color: #fff;
-    padding: 0.5rem; /* Reduced padding */
+    padding: 0.5rem;
     text-align: center;
     border-bottom: 5px solid #357abd;
 }
 
 header h1 {
     margin: 0;
-    font-size: 2rem; /* Reduced font size */
+    font-size: 2rem;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 /* Main Styles */
 main {
-    padding: 1rem; /* Reduced padding */
+    padding: 1rem;
     max-width: 1200px;
     margin: 0 auto;
-    flex: 1; /* Ensure the main section expands to take up remaining space */
+    flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Center content vertically */
-    align-items: center; /* Center content horizontally */
+    justify-content: center;
+    align-items: center;
 }
 
 #question-text {
     text-align: center;
     font-size: 2.5rem;
-     /* margin-bottom: 0.5rem; Reduced margin to move it up */
     color: #357abd;
 }
 
 #remaining-clicks {
     text-align: center;
     font-size: 1.5rem;
-     /* margin-bottom: 1rem; /* Keep this as is or reduce as needed */
     color: #4a90e2;
 }
 
 /* Buttons for category */
 .category-buttons {
     text-align: center;
-    margin-bottom: 0.5rem; /* Reduced margin */
+    margin-bottom: 0.5rem;
 }
 
 .category-buttons button {
-    margin: 0 0.5rem; /* Reduced margin */
-    padding: 0.5rem 1rem; /* Adjusted padding */
+    margin: 0 0.5rem;
+    padding: 0.5rem 1rem;
     background: #4a90e2;
     color: #fff;
     border: none;
@@ -73,18 +71,18 @@ main {
 
 /* Responsive Image Container */
 .image-container {
-   display: flex;
-    flex-direction: row; /* Align images side by side */
-    justify-content: center; /* Center images horizontally */
-    align-items: center; /* Vertically align images */
-    margin: 1.5rem 0; /* Margin around the image container */
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin: 1.5rem 0;
 }
 
 img {
-    width: 300px; /* Adjusted width */
-    height: 450px; /* Adjusted height */
-    object-fit: cover; /* Ensure the images cover the area */
-    margin: 0 20px; /* Increased horizontal margin for spacing */
+    width: 300px;
+    height: 450px;
+    object-fit: cover;
+    margin: 0 20px;
     border: 4px solid #ddd;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -96,17 +94,17 @@ img:hover {
     transform: scale(1.05);
 }
 
-
 #vs {
-    font-size: 1rem; /* Reduced font size */
+    font-size: 1rem;
     margin: 1rem 0;
     color: #4a90e2;
 }
 
-/* Buttons */
-button {
-    margin-top: 1rem;
-    padding: 0.5rem; /* Adjusted padding */
+/* Ranking Buttons */
+#show-ranking,
+#hide-ranking {
+    margin: 1rem 0;
+    padding: 0.5rem 1rem;
     background: #4a90e2;
     color: #fff;
     border: none;
@@ -115,21 +113,27 @@ button {
     transition: background-color 0.3s ease;
 }
 
-button:hover {
+#show-ranking:hover,
+#hide-ranking:hover {
     background: #357abd;
 }
 
-/* Ranking Section */
+/* Adjusting the Ranking Section */
 #ranking {
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     padding: 1rem;
     background: #fff;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 1rem;
 }
 
-#scoreboard p {
-    font-size: 1rem;
+#scoreboard {
+    margin-top: 1rem;
+    text-align: left;
+    width: 100%;
 }
 
 /* Reload Button */
@@ -144,7 +148,7 @@ button:hover {
     color: #fff;
     border: none;
     border-radius: 8px;
-    font-size: 1rem; /* Adjusted font size */
+    font-size: 1rem;
     cursor: pointer;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
@@ -161,7 +165,7 @@ footer {
     padding: 1rem;
     text-align: center;
     border-top: 5px solid #357abd;
-    margin-top: auto; /* Push footer to the bottom of the page */
+    margin-top: auto;
 }
 
 footer p {
@@ -171,7 +175,7 @@ footer p {
 /* Media Queries */
 @media (min-width: 768px) {
     .image-container {
-        flex-direction: row; /* Side by side on larger screens */
+        flex-direction: row;
     }
 
     #vs {
@@ -179,20 +183,20 @@ footer p {
     }
 
     img {
-        max-width: 400px; /* Fixed width for larger screens */
+        max-width: 400px;
     }
 }
 
 @media (max-width: 767px) {
     header h1 {
-        font-size: 1.5rem; /* Adjusted for smaller screens */
+        font-size: 1.5rem;
     }
 
     img {
-        width: 90%; /* Full width on smaller screens */
+        width: 90%;
     }
 
     #vs {
-        font-size: 1.5rem; /* Adjusted for smaller screens */
+        font-size: 1.5rem;
     }
 }
