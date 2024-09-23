@@ -5,13 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PhotoShowdown</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <header>
         <h1>PhotoShowdown</h1>
     </header>
+    
+    <!-- Gender Selection Modal -->
+    <div id="gender-modal" class="modal">
+        <div class="modal-content">
+            <h2>Select Your Gender</h2>
+            <button id="select-male">
+                <i class="fas fa-male"></i> Male
+            </button>
+            <button id="select-female">
+                <i class="fas fa-female"></i> Female
+            </button>
+        </div>
+    </div>
+
     <main>
-        <section id="comparison">
+        <section id="comparison" style="display: none;">
             <p id="question-text">Who is hotter? Click to select.</p>
             <p id="remaining-clicks">Remaining Clicks: 20</p>
             <div class="category-buttons">
