@@ -56,14 +56,28 @@ header h1 {
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
+#select-male, #select-female {
+    color: #ddd;
+    margin: 10px;
+    padding: 15px 30px; /* Increased padding */
+    font-size: 1.5rem; /* Increased font size */
+    border-radius: 30px; /* More rounded corners */
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
 
 #select-male {
-    background-color: #4a90e2; /* Blue */
+    background: linear-gradient(90deg, #4a90e2, #357abd); /* Blue gradient */
 }
 
 #select-female {
-    background-color: #e94e77; /* Pink */
+    background: linear-gradient(90deg, #e94e77, #d6396a); /* Pink gradient */
 }
+
+#select-male:active, #select-female:active {
+    transform: scale(0.95); /* Scale down on click */
+}
+
 
 .modal button:hover {
     transform: scale(1.10); /* Slightly enlarge on hover */
