@@ -150,7 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
     ];
 
-    const fetchNewImage = () => {
+    const fetchNewImage = (excludeImage = null) => {
     let imageArray;
     if (currentGender === 'male') {
         if (currentCategory === 'hollywood') {
@@ -170,8 +170,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    const randomIndex = Math.floor(Math.random() * imageArray.length);
-    return imageArray[randomIndex];
+    let randomImage;
+    do {
+        const randomIndex = Math.floor(Math.random() * imageArray.length);
+        randomImage = imageArray[randomIndex];
+    } while (randomImage === excludeImage); // Ensure new image is different from the excluded one
+
+    return randomImage;
 };
 
     const updateVoteCount = (winnerUrl) => {
@@ -194,33 +199,36 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const handleImageClick = (winnerUrl, loserElement) => {
-        userClickCount++;
-        remainingClicksDisplay.textContent = `Remaining Clicks: ${maxClicks - userClickCount}`;
+    userClickCount++;
+    remainingClicksDisplay.textContent = `Remaining Clicks: ${maxClicks - userClickCount}`;
 
-        updateVoteCount(winnerUrl);
+    updateVoteCount(winnerUrl);
 
-        if (userClickCount >= maxClicks) {
-            rankingSection.style.display = 'block';
-            document.getElementById('comparison').style.display = 'none';
-            updateScoreboard();
-            reloadButton.style.display = 'block';
-        } else {
-            loserElement.src = fetchNewImage();
-        }
-    };
+    if (userClickCount >= maxClicks) {
+        rankingSection.style.display = 'block';
+        document.getElementById('comparison').style.display = 'none';
+        updateScoreboard();
+        reloadButton.style.display = 'block';
+    } else {
+        const newImage = fetchNewImage(winnerUrl); // Fetch new image different from the winner image
+        loserElement.src = newImage;
+    }
+};
 
-    const reloadGame = () => {
-        userClickCount = 0;
-        remainingClicksDisplay.textContent = `Remaining Clicks: ${maxClicks}`;
-        rankingSection.style.display = 'none';
-        document.getElementById('comparison').style.display = 'block';
-        reloadButton.style.display = 'none';
-        image1.src = fetchNewImage();
-        image2.src = fetchNewImage();
-    };
+const reloadGame = () => {
+    userClickCount = 0;
+    remainingClicksDisplay.textContent = `Remaining Clicks: ${maxClicks}`;
+    rankingSection.style.display = 'none';
+    document.getElementById('comparison').style.display = 'block';
+    reloadButton.style.display = 'none';
 
-    image1.src = fetchNewImage();
-    image2.src = fetchNewImage();
+    // Ensure different images are fetched for image1 and image2
+    const newImage1 = fetchNewImage();
+    const newImage2 = fetchNewImage(newImage1); // Pass image1 as excluded image for image2
+
+    image1.src = newImage1;
+    image2.src = newImage2;
+};
 
     image1.addEventListener('click', () => handleImageClick(image1.src, image2));
     image2.addEventListener('click', () => handleImageClick(image2.src, image1));
