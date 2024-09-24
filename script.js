@@ -38,6 +38,8 @@ document.addEventListener('DOMContentLoaded', () => {
         'Hollywood_actors/Tom Hardy.jpg',
         'Hollywood_actors/Tom Hiddleston.jpg',
         'Hollywood_actors/Tom Holland.jpg',
+        'Hollywood_actors/Andrew Garfield.jpg'
+        
     ]
 
     const femaleImages = [
@@ -118,6 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'Hollywood_actors/Tom Hardy.jpg',
         'Hollywood_actors/Tom Hiddleston.jpg',
         'Hollywood_actors/Tom Holland.jpg',
+        'Hollywood_actors/Andrew Garfield.jpg'
     ];
 
     // Bollywood images
