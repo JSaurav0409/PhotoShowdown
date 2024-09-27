@@ -6,7 +6,7 @@
 
 - **Image Comparison**: Compare two images and select your preferred one.
 - **Click Tracking**: Tracks the number of clicks each image receives.
-- **Ranking System**: Displays the ranking of images based on their popularity.
+- **Ranking System**: Displays the ranking of images based on the number of clicks they get.
 - **Reload Game**: Option to reload the game and reset the state.
 - **Responsive Design**: Mobile-friendly layout.
 
