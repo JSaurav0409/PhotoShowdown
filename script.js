@@ -1,280 +1,260 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const image1 = document.getElementById('image1');
-    const image2 = document.getElementById('image2');
-    const scoreboard = document.getElementById('scoreboard');
-    const rankingSection = document.getElementById('ranking');
-    const remainingClicksDisplay = document.getElementById('remaining-clicks');
-    const reloadButton = document.getElementById('reload-button');
-    const genderModal = document.getElementById('gender-modal');
-    const maxClicks = 15;
-    let userClickCount = 0;
-    let currentCategory = 'random';
-     let currentGender = 'female'; // Default gender
+document.addEventListener("DOMContentLoaded", () => {
+  // 1. Data Structure
+  const masterList = [
+    // FEMALE - BOLLYWOOD
+    {
+      name: "Alia Bhatt",
+      url: "Bollywood_Images/Alia Bhatt.jpg",
+      gender: "female",
+      cat: "bollywood",
+    },
+    {
+      name: "Deepika",
+      url: "Bollywood_Images/Katrina Kaif.jpg",
+      gender: "female",
+      cat: "bollywood",
+    },
+    {
+      name: "Kiara Advani",
+      url: "Bollywood_Images/Kiara Advani.jpg",
+      gender: "female",
+      cat: "bollywood",
+    },
+    {
+      name: "Mrunal Thakur",
+      url: "Bollywood_Images/Mrunal Thakur.jpg",
+      gender: "female",
+      cat: "bollywood",
+    },
 
-    let imagesData = {};
+    // FEMALE - HOLLYWOOD
+    {
+      name: "Scarlett Johansson",
+      url: "Actress_Images/Scarlett Johansson.jpg",
+      gender: "female",
+      cat: "hollywood",
+    },
+    {
+      name: "Margot Robbie",
+      url: "Actress_Images/Margot Robbie.jpg",
+      gender: "female",
+      cat: "hollywood",
+    },
+    {
+      name: "Zendaya",
+      url: "Actress_Images/Zendaya.jpg",
+      gender: "female",
+      cat: "hollywood",
+    },
+    {
+      name: "Elizabeth Olsen",
+      url: "Actress_Images/Elizabeth Olsen.jpg",
+      gender: "female",
+      cat: "hollywood",
+    },
 
-    // Hide the modal initially
-    genderModal.style.display = 'block';
+    // MALE - BOLLYWOOD
+    {
+      name: "Hrithik Roshan",
+      url: "Bollywood_actors/Hrithik.jpg",
+      gender: "male",
+      cat: "bollywood",
+    },
+    {
+      name: "Ranbir Kapoor",
+      url: "Bollywood_actors/Ranveer.jpg",
+      gender: "male",
+      cat: "bollywood",
+    },
+    {
+      name: "Shah Rukh Khan",
+      url: "Bollywood_actors/SRK.jpg",
+      gender: "male",
+      cat: "bollywood",
+    },
+    {
+      name: "Sushant Singh",
+      url: "Bollywood_actors/SSR.jpg",
+      gender: "male",
+      cat: "bollywood",
+    },
 
-    // Image arrays based on gender
-    const maleImages = [
-        'Bollywood_actors/Hrithik.jpg',
-        'Bollywood_actors/Ranveer.jpg',
-        'Bollywood_actors/Saheed.jpg',
-        'Bollywood_actors/Salman Khan.jpg',
-        'Bollywood_actors/SRK.jpg',
-        'Bollywood_actors/SSR.jpg',
-        'Bollywood_actors/Vicky.jpg',
-        'Bollywood_actors/Varun Dhawan.jpg',
-        'Bollywood_actors/Aamir Khan.jpg',
-        'Bollywood_actors/Akshay Kumar.jpg',
-        'Hollywood_actors/Brad Pitt.jpg',
-        'Hollywood_actors/Chris Hemsworth.jpg',
-        'Hollywood_actors/Josh Radnor.jpg',
-        'Hollywood_actors/Leonardo DiCaprio.jpg',
-        'Hollywood_actors/Neil Patrick Harris.jpg',
-        'Hollywood_actors/Robert Downey Jr..jpg',
-        'Hollywood_actors/Ryan Gosling.jpg',
-        'Hollywood_actors/Tom Hardy.jpg',
-        'Hollywood_actors/Tom Hiddleston.jpg',
-        'Hollywood_actors/Tom Holland.jpg',
-        'Hollywood_actors/Andrew Garfield.jpg'
-        
-    ]
+    // MALE - HOLLYWOOD
+    {
+      name: "Brad Pitt",
+      url: "Hollywood_actors/Brad Pitt.jpg",
+      gender: "male",
+      cat: "hollywood",
+    },
+    {
+      name: "Chris Hemsworth",
+      url: "Hollywood_actors/Chris Hemsworth.jpg",
+      gender: "male",
+      cat: "hollywood",
+    },
+    {
+      name: "Ryan Gosling",
+      url: "Hollywood_actors/Ryan Gosling.jpg",
+      gender: "male",
+      cat: "hollywood",
+    },
+    {
+      name: "Tom Holland",
+      url: "Hollywood_actors/Tom Holland.jpg",
+      gender: "male",
+      cat: "hollywood",
+    },
+  ];
 
-    const femaleImages = [
-        'Actress_Images/Scarlett Johansson.jpg',
-        'Actress_Images/Angelina Jolie.jpg',
-        'Actress_Images/Emma Watson.jpg',
-        'Actress_Images/Jennifer Lawrence.jpg',
-        'Actress_Images/Natalie Portman.jpg',
-        'Actress_Images/Margot Robbie.jpg',
-        'Actress_Images/Gal Gadot.jpg',
-        'Actress_Images/Charlize Theron.jpg',
-        'Actress_Images/Zendaya.jpg',
-        'Actress_Images/Mila Kunis.jpg',
-        'Actress_Images/Kylie Minogue.jpg',
-        'Actress_Images/Jessica Alba.jpg',
-        'Actress_Images/Gina Rodriguez.jpg',
-        'Actress_Images/Eiza González.jpg',
-        'Actress_Images/Alicia Vikander.jpg',
-        'Actress_Images/Sofia Vergara.jpg',
-        'Actress_Images/Halle Berry.jpg',
-        'Actress_Images/Rosie Huntington-Whiteley.jpg',
-        'Actress_Images/Elizabeth Olsen.jpg',
-        'Actress_Images/Anne Hathaway.jpg',
-        'Actress_Images/Emma Stone.jpg',
-        'Actress_Images/Cobie Smulder.jpg',
-        'Actress_Images/Megan Fox.jpg',
-        'Actress_Images/Sophie Turner.jpg',
-        'Bollywood_Images/Alia Bhatt.jpg',
-        'Bollywood_Images/Disha Patani.jpg',
-        'Bollywood_Images/Jacqueline Fernandez.jpg',
-        'Bollywood_Images/Jhanvi Kapoor.jpg',
-        'Bollywood_Images/Katrina Kaif.jpg',
-        'Bollywood_Images/Kiara Advani.jpg',
-        'Bollywood_Images/Kriti Sanon.jpg',
-        'Bollywood_Images/Mrunal Thakur.jpg',
-        'Bollywood_Images/Priyanka Chopra.jpg',
-        'Bollywood_Images/Sara ali khan.jpg',
-        'Bollywood_Images/Shraddha Kapoor.jpg',
-        'Bollywood_Images/Tamanah Bhatia.jpg',
-        'Bollywood_Images/Tapsee Pannu.jpg',
-        'Bollywood_Images/Bhumi Pednekar.jpg',
-        'Bollywood_Images/Nargis Fakhri.jpg',
-    ];
+  // 2. State Management
+  let userClickCount = 0;
+  const maxClicks = 20;
+  let currentGender = "female";
+  let currentCategory = "random";
+  let votes = JSON.parse(localStorage.getItem("ps_votes")) || {};
 
-     // Hollywood images
-    const hollywoodImages = [
-        'Actress_Images/Scarlett Johansson.jpg',
-        'Actress_Images/Angelina Jolie.jpg',
-        'Actress_Images/Emma Watson.jpg',
-        'Actress_Images/Jennifer Lawrence.jpg',
-        'Actress_Images/Natalie Portman.jpg',
-        'Actress_Images/Margot Robbie.jpg',
-        'Actress_Images/Gal Gadot.jpg',
-        'Actress_Images/Charlize Theron.jpg',
-        'Actress_Images/Zendaya.jpg',
-        'Actress_Images/Mila Kunis.jpg',
-        'Actress_Images/Kylie Minogue.jpg',
-        'Actress_Images/Jessica Alba.jpg',
-        'Actress_Images/Gina Rodriguez.jpg',
-        'Actress_Images/Eiza González.jpg',
-        'Actress_Images/Alicia Vikander.jpg',
-        'Actress_Images/Sofia Vergara.jpg',
-        'Actress_Images/Halle Berry.jpg',
-        'Actress_Images/Rosie Huntington-Whiteley.jpg',
-        'Actress_Images/Elizabeth Olsen.jpg',
-        'Actress_Images/Anne Hathaway.jpg',
-        'Actress_Images/Emma Stone.jpg',
-        'Actress_Images/Cobie Smulder.jpg',
-        'Actress_Images/Megan Fox.jpg',
-        'Actress_Images/Sophie Turner.jpg',
-        'Hollywood_actors/Brad Pitt.jpg',
-        'Hollywood_actors/Chris Hemsworth.jpg',
-        'Hollywood_actors/Josh Radnor.jpg',
-        'Hollywood_actors/Leonardo DiCaprio.jpg',
-        'Hollywood_actors/Neil Patrick Harris.jpg',
-        'Hollywood_actors/Robert Downey Jr..jpg',
-        'Hollywood_actors/Ryan Gosling.jpg',
-        'Hollywood_actors/Tom Hardy.jpg',
-        'Hollywood_actors/Tom Hiddleston.jpg',
-        'Hollywood_actors/Tom Holland.jpg',
-        'Hollywood_actors/Andrew Garfield.jpg'
-    ];
+  const img1 = document.getElementById("image1");
+  const img2 = document.getElementById("image2");
+  const clicksDisplay = document.getElementById("remaining-clicks");
 
-    // Bollywood images
-    const bollywoodImages = [
-        'Bollywood_Images/Alia Bhatt.jpg',
-        'Bollywood_Images/Disha Patani.jpg',
-        'Bollywood_Images/Jacqueline Fernandez.jpg',
-        'Bollywood_Images/Jhanvi Kapoor.jpg',
-        'Bollywood_Images/Katrina Kaif.jpg',
-        'Bollywood_Images/Kiara Advani.jpg',
-        'Bollywood_Images/Kriti Sanon.jpg',
-        'Bollywood_Images/Mrunal Thakur.jpg',
-        'Bollywood_Images/Priyanka Chopra.jpg',
-        'Bollywood_Images/Sara ali khan.jpg',
-        'Bollywood_Images/Shraddha Kapoor.jpg',
-        'Bollywood_Images/Tamanah Bhatia.jpg',
-        'Bollywood_Images/Tapsee Pannu.jpg',
-        'Bollywood_Images/Bhumi Pednekar.jpg',
-        'Bollywood_Images/Nargis Fakhri.jpg',
-        'Bollywood_actors/Hrithik.jpg',
-        'Bollywood_actors/Ranveer.jpg',
-        'Bollywood_actors/Saheed.jpg',
-        'Bollywood_actors/Salman Khan.jpg',
-        'Bollywood_actors/SRK.jpg',
-        'Bollywood_actors/SSR.jpg',
-        'Bollywood_actors/Vicky.jpg',
-        'Bollywood_actors/Varun Dhawan.jpg',
-        'Bollywood_actors/Aamir Khan.jpg',
-        'Bollywood_actors/Akshay Kumar.jpg',
-        
-    ];
+  // 3. Selection Logic
+  const getFilteredList = () => {
+    return masterList.filter(
+      (item) =>
+        item.gender === currentGender &&
+        (currentCategory === "random" || item.cat === currentCategory),
+    );
+  };
 
-    const fetchNewImage = (excludeImage = null) => {
-    let imageArray;
-    if (currentGender === 'male') {
-        if (currentCategory === 'hollywood') {
-            imageArray = hollywoodImages.filter(url => femaleImages.includes(url));
-        } else if (currentCategory === 'bollywood') {
-            imageArray = bollywoodImages.filter(url => femaleImages.includes(url));
-        } else {
-            imageArray = femaleImages; // Random category for male
-        }
-    } else { // female
-        if (currentCategory === 'hollywood') {
-            imageArray = hollywoodImages.filter(url => maleImages.includes(url));
-        } else if (currentCategory === 'bollywood') {
-            imageArray = bollywoodImages.filter(url => maleImages.includes(url));
-        } else {
-            imageArray = maleImages; // Random category for female
-        }
+  // 1. Update getRandomItem to accept an exclusion
+  const getRandomItem = (excludeUrl) => {
+    const list = getFilteredList();
+
+    // Safety check: if the list has only 1 item, we can't find a second unique one
+    if (list.length < 2) {
+      console.error("Not enough images in this category!");
+      return list[0];
     }
 
-    let randomImage;
+    let item;
     do {
-        const randomIndex = Math.floor(Math.random() * imageArray.length);
-        randomImage = imageArray[randomIndex];
-    } while (randomImage === excludeImage); // Ensure new image is different from the excluded one
+      item = list[Math.floor(Math.random() * list.length)];
+    } while (item.url === excludeUrl); // Keep picking until it's different
 
-    return randomImage;
-};
+    return item;
+  };
 
-    const updateVoteCount = (winnerUrl) => {
-        if (!imagesData[winnerUrl]) {
-            imagesData[winnerUrl] = 0;
-        }
-        imagesData[winnerUrl]++;
-    };
+  // 2. Update loadNewBattle to pass the first selection into the second
+  const loadNewBattle = () => {
+    const item1 = getRandomItem(); // Pick any random image
+    const item2 = getRandomItem(item1.url); // Pick a random image BUT NOT item1
 
-    const updateScoreboard = () => {
-        const sortedImages = Object.entries(imagesData)
-            .sort((a, b) => b[1] - a[1])
-            .slice(0, 5);
+    img1.src = item1.url;
+    img2.src = item2.url;
 
-        scoreboard.innerHTML = sortedImages.map(([url], index) => `
-            <div class="score-item">
-                <p>${index + 1}. <img src="${url}" alt="Image ${index + 1}" width="50"></p>
-            </div>
-        `).join('');
-    };
-
-    const handleImageClick = (winnerUrl, loserElement) => {
+    // Store the current URLs in the parent boxes for the click logic
+    img1.parentElement.dataset.url = item1.url;
+    img2.parentElement.dataset.url = item2.url;
+  };
+  // 4. Interaction Logic
+  const handleVote = (winnerUrl, loserBox) => {
     userClickCount++;
-    remainingClicksDisplay.textContent = `Remaining Clicks: ${maxClicks - userClickCount}`;
+    clicksDisplay.textContent = maxClicks - userClickCount;
 
-    updateVoteCount(winnerUrl);
+    // Record Vote
+    votes[winnerUrl] = (votes[winnerUrl] || 0) + 1;
+    localStorage.setItem("ps_votes", JSON.stringify(votes));
 
     if (userClickCount >= maxClicks) {
-        rankingSection.style.display = 'block';
-        document.getElementById('comparison').style.display = 'none';
-        updateScoreboard();
-        reloadButton.style.display = 'block';
+      endGame();
     } else {
-        const newImage = fetchNewImage(winnerUrl); // Fetch new image different from the winner image
-        loserElement.src = newImage;
+      // Smoothly replace the loser
+      const nextItem = getRandomItem(winnerUrl);
+      loserBox.querySelector("img").style.opacity = 0;
+      setTimeout(() => {
+        loserBox.querySelector("img").src = nextItem.url;
+        loserBox.dataset.url = nextItem.url;
+        loserBox.querySelector("img").style.opacity = 1;
+      }, 200);
     }
-};
+  };
 
-const reloadGame = () => {
-    userClickCount = 0;
-    remainingClicksDisplay.textContent = `Remaining Clicks: ${maxClicks}`;
-    rankingSection.style.display = 'none';
-    document.getElementById('comparison').style.display = 'block';
-    reloadButton.style.display = 'none';
+  const endGame = () => {
+    document.getElementById("comparison").style.display = "none";
+    document.getElementById("ranking").style.display = "block";
+    document.getElementById("reload-button").style.display = "inline-block";
+    renderScoreboard();
+  };
 
-    // Ensure different images are fetched for image1 and image2
-    const newImage1 = fetchNewImage();
-    const newImage2 = fetchNewImage(newImage1); // Pass image1 as excluded image for image2
+  const renderScoreboard = () => {
+    const sorted = Object.entries(votes)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 5);
 
-    image1.src = newImage1;
-    image2.src = newImage2;
-};
+    document.getElementById("scoreboard").innerHTML = sorted
+      .map(
+        ([url, count], i) => `
+            <div class="score-item">
+                <span class="rank">#${i + 1}</span>
+                <img src="${url}">
+                <div class="details">
+                    <p>Votes: ${count}</p>
+                </div>
+            </div>
+        `,
+      )
+      .join("");
+  };
 
-    image1.addEventListener('click', () => handleImageClick(image1.src, image2));
-    image2.addEventListener('click', () => handleImageClick(image2.src, image1));
-    
-    reloadButton.addEventListener('click', reloadGame);
+  // 5. Event Listeners
+  document.getElementById("select-male").addEventListener("click", () => {
+    currentGender = "male";
+    startGame();
+  });
 
-    document.getElementById('hollywood-button').addEventListener('click', () => {
-        currentCategory = 'hollywood';
-        reloadGame();
+  document.getElementById("select-female").addEventListener("click", () => {
+    currentGender = "female";
+    startGame();
+  });
+
+  const startGame = () => {
+    document.getElementById("gender-modal").style.display = "none";
+    document.getElementById("main-game").style.display = "block";
+    loadNewBattle();
+  };
+
+  document
+    .getElementById("box1")
+    .addEventListener("click", () =>
+      handleVote(img1.src, document.getElementById("box2")),
+    );
+  document
+    .getElementById("box2")
+    .addEventListener("click", () =>
+      handleVote(img2.src, document.getElementById("box1")),
+    );
+
+  document.querySelectorAll(".pill").forEach((pill) => {
+    pill.addEventListener("click", (e) => {
+      document.querySelector(".pill.active").classList.remove("active");
+      e.target.classList.add("active");
+      currentCategory = e.target.dataset.cat;
+      loadNewBattle();
     });
+  });
 
-    document.getElementById('bollywood-button').addEventListener('click', () => {
-        currentCategory = 'bollywood';
-        reloadGame();
-    });
+  document.getElementById("show-ranking").addEventListener("click", () => {
+    document.getElementById("comparison").style.display = "none";
+    document.getElementById("ranking").style.display = "block";
+    renderScoreboard();
+  });
 
-    document.getElementById('random-button').addEventListener('click', () => {
-        currentCategory = 'random';
-        reloadGame();
-    });
+  document.getElementById("hide-ranking").addEventListener("click", () => {
+    document.getElementById("comparison").style.display = "flex";
+    document.getElementById("ranking").style.display = "none";
+  });
 
-    document.getElementById('hide-ranking').addEventListener('click', () => {
-        rankingSection.style.display = 'none';
-        document.getElementById('comparison').style.display = 'block';
-        reloadButton.style.display = 'none';
-    });
-
-    document.getElementById('show-ranking').addEventListener('click', () => {
-        rankingSection.style.display = 'block';
-        document.getElementById('comparison').style.display = 'none';
-        updateScoreboard();
-    });
-
-    // Add event listeners for gender buttons
-    document.getElementById('select-male').addEventListener('click', () => {
-        currentGender = 'male';
-        document.getElementById('gender-modal').style.display = 'none'; // Hide the gender selection popup
-        reloadGame();
-    });
-
-    document.getElementById('select-female').addEventListener('click', () => {
-        currentGender = 'female';
-        document.getElementById('gender-modal').style.display = 'none'; // Hide the gender selection popup
-        reloadGame();
-    });
+  document
+    .getElementById("reload-button")
+    .addEventListener("click", () => location.reload());
 });

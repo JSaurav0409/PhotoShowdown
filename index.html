@@ -1,57 +1,90 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PhotoShowdown</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="icon" href="favicon/favicon.png" type="image/x-icon">
-</head>
-<body>
-    <header>
-        <h1>PhotoShowdown</h1>
-    </header>
-    
-    <!-- Gender Selection Modal -->
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PhotoShowdown | The Arena</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+  </head>
+  <body>
     <div id="gender-modal" class="modal">
-        <div class="modal-content">
-            <h2>Select Your Gender</h2>
-            <button id="select-male">
-                <i class="fas fa-male"></i> Male
-            </button>
-            <button id="select-female">
-                <i class="fas fa-female"></i> Female
-            </button>
+      <div class="modal-content">
+        <h2>Enter the Arena</h2>
+        <p>Select who you want to rank</p>
+        <div class="modal-buttons">
+          <button id="select-male" class="btn-male">
+            <i class="fas fa-mars"></i> Actors
+          </button>
+          <button id="select-female" class="btn-female">
+            <i class="fas fa-venus"></i> Actresses
+          </button>
         </div>
+      </div>
     </div>
 
-    <main>
-        <section id="comparison" style="display: none;">
-            <p id="question-text">Who is hotter? Click to select.</p>
-            <p id="remaining-clicks">Remaining Clicks: 20</p>
-            <div class="category-buttons">
-                <button id="hollywood-button">Hollywood</button>
-                <button id="bollywood-button">Bollywood</button>
-                <button id="random-button">Random</button>
-            </div>
-            <div class="image-container">
-                <img id="image1" src="" alt="Image 1">
-                <div id="vs">V/S</div>
-                <img id="image2" src="" alt="Image 2">
-            </div>
-            <button id="show-ranking">Show Ranking</button>
-        </section>
-        <section id="ranking" style="display: none;">
-            <h2>Ranking</h2>
-            <div id="scoreboard"></div>
-            <button id="hide-ranking">Hide Ranking</button>
-        </section>
+    <header>
+      <h1>PHOTO<span>SHOWDOWN</span></h1>
+    </header>
+
+    <main id="main-game" style="display: none">
+      <div class="stats-bar">
+        <div class="stat">
+          <span class="label">Battles Left</span>
+          <span id="remaining-clicks" class="value">20</span>
+        </div>
+        <div class="category-pills">
+          <button class="pill active" data-cat="random">Random</button>
+          <button class="pill" data-cat="hollywood">Hollywood</button>
+          <button class="pill" data-cat="bollywood">Bollywood</button>
+        </div>
+      </div>
+
+      <section id="comparison">
+        <div class="contender-box" id="box1">
+          <div class="img-wrapper">
+            <img id="image1" src="" alt="Contender 1" />
+            <div class="pick-overlay">HOTTER</div>
+          </div>
+        </div>
+
+        <div class="vs-divider">
+          <div class="vs-line"></div>
+          <div class="vs-circle">VS</div>
+          <div class="vs-line"></div>
+        </div>
+
+        <div class="contender-box" id="box2">
+          <div class="img-wrapper">
+            <img id="image2" src="" alt="Contender 2" />
+            <div class="pick-overlay">HOTTER</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="ranking" class="glass-panel" style="display: none">
+        <h2><i class="fas fa-trophy"></i> Current Hall of Fame</h2>
+        <div id="scoreboard"></div>
+        <button id="hide-ranking" class="btn-outline">Return to Arena</button>
+      </section>
+
+      <div class="controls">
+        <button id="show-ranking" class="btn-glass">View Ranking</button>
+        <button id="reload-button" class="btn-glass" style="display: none">
+          Reset Game
+        </button>
+      </div>
     </main>
-    <button id="reload-button" style="display: none;">Reload Game</button>
+
     <footer>
-        <p>&copy; 2024 PhotoShowdown. All rights reserved.</p>
+      <p>
+        &copy; <span id="current-year"></span> PhotoShowdown • Cinematic Edition
+      </p>
     </footer>
+
     <script src="script.js"></script>
-</body>
+  </body>
 </html>
